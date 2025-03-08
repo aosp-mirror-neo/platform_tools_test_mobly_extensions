@@ -419,7 +419,7 @@ def main():
     parser.add_argument(
         '--gcs_dir',
         help=(
-            'Directory to save test artifacts in GCS. If unspecified or empty,'
+            'Directory to save test artifacts in GCS. If unspecified or empty, '
             'use the current timestamp as the GCS directory name.'
         ),
     )
