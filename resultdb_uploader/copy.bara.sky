@@ -1,0 +1,67 @@
+git_files = glob(
+  include = ["resultdb/proto/v1/*.proto"]
+)
+
+dest_files = glob(
+  include = ["proto/resultdb/*"],
+  exclude = ["proto/resultdb/OWNERS"]
+)
+
+# Copies ResultDB proto to the current codebase under proto/resultdb/*.
+# Require mannully run this command in the current directory: copybara copy.bara.sky resultdb --folder-dir .
+core.workflow(
+   name = "resultdb",
+   origin =  git.origin(
+        url = "https://chromium.googlesource.com/infra/luci/luci-go.git",
+        ref = "main",
+    ),
+   authoring = authoring.pass_thru("jjerry <jjerry@google.com>"),
+   origin_files = git_files,
+   destination_files = dest_files,
+   transformations = [
+    core.move("resultdb/proto/v1", "proto/resultdb/"),
+    core.replace(
+      before = '''// Copyright ${year} The LUCI Authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.''',
+      after = '''/*
+* Copyright (C) ${year} The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/''',
+      multiline = True,
+      regex_groups = {'year' : '[0-9]{4}'}
+    ),
+    core.replace(
+      before = "option java_package = \"com.google.luci.resultdb.v1\";",
+      after = "option java_package = \"com.android.resultdb.proto\";"
+    ),
+    core.replace(
+      before = "import \"go.chromium.org/luci/resultdb/proto/v1/",
+      after = "import public \"tools/test/mobly_extensions/resultdb_uploader/proto/resultdb/"
+    )
+   ],
+   ask_for_confirmation = True,
+
+   destination = folder.destination()
+)
