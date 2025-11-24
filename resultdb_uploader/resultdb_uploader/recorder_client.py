@@ -16,6 +16,7 @@ _PROD_HOST = 'results.api.luci.app'
 _STAGING_HOST = 'staging.results.api.luci.app'
 _DEFAULT_PORT = 443
 _GRPC_TIMEOUT_SECONDS = 120  # 2 minutes
+_MAX_MESSAGE_LENGTH = 10 * 1024 * 1024  # 100MB
 _UPDATE_TOKEN_METADATA_KEY = 'update-token'
 _INCLUSION_TOKEN_METADATA_KEY = 'inclusion-token'
 
@@ -76,6 +77,8 @@ class RecorderClient:
     options = [
         ('grpc.enable_retries', 1),
         ('grpc.service_config', json.dumps(service_config)),
+        ('grpc.max_send_message_length', _MAX_MESSAGE_LENGTH),
+        ('grpc.max_receive_message_length', _MAX_MESSAGE_LENGTH),
     ]
     self._channel = grpc.secure_channel(
         self._target, self._channel_creds, options=options

@@ -1,0 +1,16 @@
+09-25 00:52:46.163 INFO ==========> TuningLinkageTest <==========
+09-25 00:53:05.767 INFO [Test] test_linking_correct_device_tuning_data
+09-25 00:53:13.152 ERROR Exception occurred in test_linking_correct_device_tuning_data.
+Traceback (most recent call last):
+  File "mobly/base_test.py", line 801, in exec_one_test
+  File "g3_shared/mobly/tuning_linkage/tuning_linkage_test.py", line 160, in test_linking_correct_device_tuning_data
+  File "mobly/asserts.py", line 205, in assert_greater
+  File "mobly/asserts.py", line 50, in _call_unittest_assertion
+mobly.signals.TestFailure: Details=0 not greater than 0, Extras=None
+09-25 00:53:13.958 INFO [Test] test_linking_correct_device_tuning_data FAIL
+09-25 00:53:14.012 INFO Summary for test class TuningLinkageTest: Error 0, Executed 1, Failed 1, Passed 0, Requested 1, Skipped 0
+09-25 00:53:14.012 INFO Summary for test run LocalTestBed@09-25-2025_00-52-46-161:
+Total time elapsed 27.850252113013994s
+Artifacts are saved in "/tmp/atest_result_jjerry/20250925_005009_wt6bii1r/mobly_logs/LocalTestBed/09-25-2025_00-52-46-161"
+Test summary saved in "/tmp/atest_result_jjerry/20250925_005009_wt6bii1r/mobly_logs/LocalTestBed/09-25-2025_00-52-46-161/test_summary.yaml"
+Test results: Error 0, Executed 1, Failed 1, Passed 0, Requested 1, Skipped 0

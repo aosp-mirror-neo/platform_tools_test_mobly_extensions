@@ -1,0 +1,34 @@
+/*
+ * Mobly tests that can be run to trigger ResultDB uploads in atest
+ * To run make-toast-test: atest make-toast-test
+ * To run turn-off-wifi-test: atest turn-off-wifi-test
+ */
+python_test_host {
+    name: "make-toast-test",
+    srcs: ["make_toast_test.py"],
+    main: "make_toast_test.py",
+    libs: ["mobly"],
+    device_common_data: [
+        ":mobly-bundled-snippets",
+    ],
+    test_options: {
+        unit_test: false,
+        runner: "mobly",
+    },
+    embedded_launcher: true,
+}
+
+python_test_host {
+    name: "turn-off-wifi-test",
+    srcs: ["turn_off_wifi_test.py"],
+    main: "turn_off_wifi_test.py",
+    libs: ["mobly"],
+    device_common_data: [
+        ":mobly-bundled-snippets",
+    ],
+    test_options: {
+        unit_test: false,
+        runner: "mobly",
+    },
+    embedded_launcher: true,
+}

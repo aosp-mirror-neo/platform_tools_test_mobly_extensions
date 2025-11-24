@@ -1,9 +1,9 @@
 import importlib.resources
 import json
+import logging
 import os
 import stat
 import subprocess
-import sys
 from typing import Any
 
 RESULTDB_MODULE_NAME = "resultdb_uploader"
@@ -22,11 +22,14 @@ def get_upload_command(
   executable_path: str,
   ants_invocation_id: str,
   test_results: list[dict[str, Any]],
+  is_prod: bool,
 ) -> list[str]:
   """Get the command to upload test results to ResultDB."""
   command = [
       executable_path, "--invocation-id", ants_invocation_id
   ]
+  if is_prod:
+    command.append("--is-prod")
   for test_result in test_results:
     command.append("--test-result")
     command.append(json.dumps(test_result))
@@ -45,6 +48,8 @@ def enabled() -> bool:
 def upload(
   ants_invocation_id: str,
   test_results: list[dict[str, Any]],
+  base_log_path: str | None = None,
+  is_prod: bool = False,
 ) -> bool:
   """This function is a wrapper for the 'resultdb_uploader' executable."""
   try:
@@ -62,25 +67,41 @@ def upload(
       try:
         set_execute_permissions(executable_path)
       except OSError as e:
-        print(
-          f"Could not set execute permissions on {executable_path}: {e}",
-          file=sys.stderr,
+        logging.error(
+          "Could not set execute permissions on %s: %s",
+          executable_path,
+          e,
         )
         return False
 
+      run_kwargs = {}
+      if base_log_path:
+        run_kwargs["cwd"] = base_log_path
+
       # Run the executable with the upload command.
-      subprocess.run(
-        get_upload_command(
-          str(executable_path),
-          ants_invocation_id,
-          test_results,
-        ),
-        check=True,
+      result = subprocess.run(
+          get_upload_command(
+              str(executable_path),
+              ants_invocation_id,
+              test_results,
+              is_prod,
+          ),
+          check=True,
+          capture_output=True,
+          text=True,
+          **run_kwargs,
       )
+      if result.stdout:
+        logging.info("ResultDB uploader stdout: %s", result.stdout)
+      if result.stderr:
+        logging.error("ResultDB uploader stderr: %s", result.stderr)
   except subprocess.CalledProcessError as e:
-    print(f"Error executing uploader: {e}", file=sys.stderr)
+    print("Error encountered while executing ResultDB uploader")
+    if e.stderr:
+      print(e.stderr)
+      logging.error("ResultDB uploader stderr: %s", e.stderr)
     return False
   except Exception as e:
-    print(f"An unexpected error occurred: {e}", file=sys.stderr)
+    logging.error("An unexpected error occurred: %s", e)
     return False
   return True
