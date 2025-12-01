@@ -1,0 +1,106 @@
+---
+Requested Tests:
+- test_linking_correct_device_tuning_data
+Type: TestNameList
+...
+---
+Begin Time: 1758761585767
+Details: 0 not greater than 0
+End Time: 1758761593958
+Extra Errors: {}
+Extras: null
+Parent: null
+Result: FAIL
+Retry Parent: null
+Signature: test_linking_correct_device_tuning_data-1758761585767
+Stacktrace: "Traceback (most recent call last):\n  File \"mobly/base_test.py\", line\
+    \ 801, in exec_one_test\n  File \"g3_shared/mobly/tuning_linkage/tuning_linkage_test.py\"\
+    , line 160, in test_linking_correct_device_tuning_data\n  File \"mobly/asserts.py\"\
+    , line 205, in assert_greater\n  File \"mobly/asserts.py\", line 50, in _call_unittest_assertion\n\
+    mobly.signals.TestFailure: Details=0 not greater than 0, Extras=None\n"
+Termination Signal Type: TestFailure
+Test Class: TuningLinkageTest
+Test Name: test_linking_correct_device_tuning_data
+Type: Record
+UID: null
+...
+---
+Controller Info:
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: generic/aosp_cf_x86_64_phone/vsoc_x86_64:Baklava/MAIN.f45f7647/13281750:userdebug/test-keys
+        build_id: MAIN.f45f7647
+        build_product: vsoc_x86_64
+        build_type: userdebug
+        build_version_codename: Baklava
+        build_version_incremental: '13281750'
+        build_version_sdk: '35'
+        build_version_sdk_full: ''
+        debuggable: '1'
+        hardware: cutf_cvm
+        product_name: aosp_cf_x86_64_phone
+    model: aosp_cf_x86_64_phone
+    serial: 127.0.0.1:34667
+    user_added_info: {}
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: generic/aosp_cf_x86_64_phone/vsoc_x86_64:Baklava/MAIN.f45f7647/13281750:userdebug/test-keys
+        build_id: MAIN.f45f7647
+        build_product: vsoc_x86_64
+        build_type: userdebug
+        build_version_codename: Baklava
+        build_version_incremental: '13281750'
+        build_version_sdk: '35'
+        build_version_sdk_full: ''
+        debuggable: '1'
+        hardware: cutf_cvm
+        product_name: aosp_cf_x86_64_phone
+    model: aosp_cf_x86_64_phone
+    serial: 127.0.0.1:49363
+    user_added_info: {}
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: generic/aosp_cf_x86_64_phone/vsoc_x86_64:Baklava/MAIN.f45f7647/13281750:userdebug/test-keys
+        build_id: MAIN.f45f7647
+        build_product: vsoc_x86_64
+        build_type: userdebug
+        build_version_codename: Baklava
+        build_version_incremental: '13281750'
+        build_version_sdk: '35'
+        build_version_sdk_full: ''
+        debuggable: '1'
+        hardware: cutf_cvm
+        product_name: aosp_cf_x86_64_phone
+    model: aosp_cf_x86_64_phone
+    serial: 127.0.0.1:49545
+    user_added_info: {}
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: generic/aosp_cf_x86_64_phone/vsoc_x86_64:Baklava/MAIN.f45f7647/13281750:userdebug/test-keys
+        build_id: MAIN.f45f7647
+        build_product: vsoc_x86_64
+        build_type: userdebug
+        build_version_codename: Baklava
+        build_version_incremental: '13281750'
+        build_version_sdk: '35'
+        build_version_sdk_full: ''
+        debuggable: '1'
+        hardware: cutf_cvm
+        product_name: aosp_cf_x86_64_phone
+    model: aosp_cf_x86_64_phone
+    serial: 127.0.0.1:60507
+    user_added_info: {}
+Controller Name: AndroidDevice
+Test Class: TuningLinkageTest
+Timestamp: 1758761593.9881153
+Type: ControllerInfo
+...
+---
+Error: 0
+Executed: 1
+Failed: 1
+Passed: 0
+Requested: 1
+Skipped: 0
+Type: Summary
+...

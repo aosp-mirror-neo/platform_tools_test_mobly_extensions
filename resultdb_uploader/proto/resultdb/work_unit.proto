@@ -32,7 +32,7 @@ option java_multiple_files = true;
 // A process step that contributes results to a root invocation.
 // Work units contain test results, artifacts and exonerations. Work units may
 // also contain other work units and (legacy) invocations.
-// Next ID: 25.
+// Next ID: 27.
 message WorkUnit {
   // The resource name of this work unit.
   // Format: `rootInvocations/{ROOT_INVOCATION_ID}/workUnits/{WORK_UNIT_ID}`
@@ -158,6 +158,11 @@ message WorkUnit {
 
   // A summary of the final state of the work unit, to be displayed on the UI.
   // MUST be escaped prior to rendering on the UI.
+  //
+  // E.g. if the work unit failed, the reason/stack trace describing why
+  // it failed.
+  //
+  // Can be elided if the work unit succeeded.
   //
   // The size of the summary must be equal to or smaller than 4096 bytes in
   // UTF-8.
@@ -339,14 +344,10 @@ message WorkUnit {
     (google.api.field_behavior) = IMMUTABLE
   ];
 
-  // Full name of the resource that produced results in this work unit.
-  // See also https://aip.dev/122#full-resource-names
-  // Typical examples:
-  // - Swarming task: "//chromium-swarm.appspot.com/tasks/deadbeef"
-  // - Buildbucket build: "//cr-buildbucket.appspot.com/builds/1234567890".
+  // The resource that produced results in this work unit.
   //
   // Setting this field requires resultdb.workUnits.setProducerResource permission.
-  string producer_resource = 13 [ (google.api.field_behavior) = IMMUTABLE ];
+  ProducerResource producer_resource = 26 [ (google.api.field_behavior) = IMMUTABLE ];
 
   // Work unit-level string key-value pairs.
   // A key can be repeated.
@@ -408,6 +409,7 @@ message WorkUnit {
   // The metadata fields for a WorkUnit are:
   // * name
   // * work_unit_id
+  // * kind
   // * finalization_state
   // * state
   // * summary_markdown (truncated to the first 140 bytes)
