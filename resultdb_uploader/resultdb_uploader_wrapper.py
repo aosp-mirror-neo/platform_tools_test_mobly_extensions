@@ -92,13 +92,13 @@ def upload(
           **run_kwargs,
       )
       if result.stdout:
-        logging.info("ResultDB uploader stdout: %s", result.stdout)
+        print(result.stdout)
       if result.stderr:
         logging.error("ResultDB uploader stderr: %s", result.stderr)
   except subprocess.CalledProcessError as e:
-    print("Error encountered while executing ResultDB uploader")
+    if e.stdout:
+      print(e.stdout)
     if e.stderr:
-      print(e.stderr)
       logging.error("ResultDB uploader stderr: %s", e.stderr)
     return False
   except Exception as e:

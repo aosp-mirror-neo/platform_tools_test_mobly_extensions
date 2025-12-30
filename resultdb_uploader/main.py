@@ -25,6 +25,78 @@ def print_test_result_url(invocation_id: str, url_prefix: str) -> None:
   )
 
 
+def upload_test_result(
+    uploader: atest_mobly_test_result_uploader.AtestMoblyTestResultUploader,
+    test_result_json: str,
+) -> bool:
+  """Uploads a single test result to ResultDB."""
+  test_result_data = json.loads(test_result_json)
+  module_name = test_result_data["module_name"]
+  class_name = test_result_data["class_name"]
+  method_name = test_result_data["method_name"]
+  start_time = test_result_data["start_time"]
+  duration = test_result_data["duration"]
+  status = resultdb_test_status.TestStatus[test_result_data["status"]]
+  ants_work_unit_id = test_result_data["ants_work_unit_id"]
+  artifact_paths = test_result_data.get("artifact_paths", [])
+  if "failure_reason" in test_result_data:
+    status_reason = {
+        "failure_reason": resultdb_test_status.FailureStatusReason[
+            test_result_data["failure_reason"]
+        ]
+    }
+  elif "skipped_reason" in test_result_data:
+    status_reason = {
+        "skipped_reason": resultdb_test_status.SkippedStatusReason[
+            test_result_data["skipped_reason"]
+        ]
+    }
+  else:
+    status_reason = resultdb_test_status.get_default_status_reason(
+      test_result_data["status"]
+    )
+
+  # Create a work unit using the ID from the JSON
+  try:
+    uploader.create_child_work_unit(
+      ants_work_unit_id=ants_work_unit_id,
+      module_name=module_name,
+    )
+  except grpc.RpcError as e:
+    logging.error("Failed to create work unit: %s", e)
+    return False
+
+  test_result_kwargs = {}
+  if "summary_html" in test_result_data:
+    test_result_kwargs["summary_html"] = test_result_data["summary_html"]
+
+  try:
+    # Create the test result
+    uploader.create_test_result(
+      ants_work_unit_id=ants_work_unit_id,
+      module_name=module_name,
+      class_name=class_name,
+      method_name=method_name,
+      start_time_nanoseconds=start_time,
+      duration_nanoseconds=duration,
+      test_status=status,
+      **status_reason,
+      **test_result_kwargs,
+    )
+  except grpc.RpcError as e:
+    logging.error("Failed to create test result: %s", e)
+    return False
+
+  uploader.create_test_artifacts(
+    ants_work_unit_id=ants_work_unit_id,
+    module_name=module_name,
+    class_name=class_name,
+    method_name=method_name,
+    artifact_paths=artifact_paths,
+  )
+  return True
+
+
 def main():
   """
   A program that uploads test results to a specific ResultDB invocation.
@@ -119,79 +191,26 @@ def main():
     uploader.create_root_invocation(ants_invocation_id=args.invocation_id)
   except grpc.RpcError as e:
     logging.error("Failed to create root invocation: %s", e)
+    print(
+        "Encountered an error while uploading to ResultDB. "
+        "Please make sure you have set up application default credentials. "
+        "You can run the following command to login:\n"
+        "gcloud auth application-default login"
+    )
+    return 1
+  except Exception as e:
+    logging.error(
+      "Encountered an unexpected error while creating root invocation: %s", e
+    )
     return 1
 
   ok = True
   for test_result_json in args.test_results:
-    test_result_data = json.loads(test_result_json)
-
-    module_name = test_result_data["module_name"]
-    class_name = test_result_data["class_name"]
-    method_name = test_result_data["method_name"]
-    start_time = test_result_data["start_time"]
-    duration = test_result_data["duration"]
-    status = resultdb_test_status.TestStatus[test_result_data["status"]]
-    ants_work_unit_id = test_result_data["ants_work_unit_id"]
-    artifact_paths = test_result_data.get("artifact_paths", [])
-    if "failure_reason" in test_result_data:
-      status_reason = {
-          "failure_reason": resultdb_test_status.FailureStatusReason[
-              test_result_data["failure_reason"]
-          ]
-      }
-    elif "skipped_reason" in test_result_data:
-      status_reason = {
-          "skipped_reason": resultdb_test_status.SkippedStatusReason[
-              test_result_data["skipped_reason"]
-          ]
-      }
-    else:
-      status_reason = resultdb_test_status.get_default_status_reason(
-        test_result_data["status"]
-      )
-
-    # Create a work unit using the ID from the JSON
     try:
-      uploader.create_child_work_unit(
-        ants_work_unit_id=ants_work_unit_id,
-        module_name=module_name,
-      )
-    except grpc.RpcError as e:
-      logging.error("Failed to create work unit: %s", e)
+      ok = ok and upload_test_result(uploader, test_result_json)
+    except Exception as e:
+      logging.error("Encountered an unexpected error while uploading test result: %s", e)
       ok = False
-      # Go to next test result if one work unit creation fails
-      continue
-
-    test_result_kwargs = {}
-    if "summary_html" in test_result_data:
-      test_result_kwargs["summary_html"] = test_result_data["summary_html"]
-
-    try:
-      # Create the test result
-      uploader.create_test_result(
-        ants_work_unit_id=ants_work_unit_id,
-        module_name=module_name,
-        class_name=class_name,
-        method_name=method_name,
-        start_time_nanoseconds=start_time,
-        duration_nanoseconds=duration,
-        test_status=status,
-        **status_reason,
-        **test_result_kwargs,
-      )
-    except grpc.RpcError as e:
-      logging.error("Failed to create test result: %s", e)
-      ok = False
-      # Go to next test result if one test result creation fails
-      continue
-
-    uploader.create_test_artifacts(
-      ants_work_unit_id=ants_work_unit_id,
-      module_name=module_name,
-      class_name=class_name,
-      method_name=method_name,
-      artifact_paths=artifact_paths,
-    )
 
   try:
     # Finalize all work units
@@ -200,6 +219,10 @@ def main():
     uploader.finalize_root_work_unit()
   except grpc.RpcError as e:
     logging.error("Failed to finalize work unit: %s", e)
+  except Exception as e:
+    logging.error(
+      "Encountered an unexpected error while finalizing work units: %s", e
+    )
 
   if args.output_url:
     print_test_result_url(
