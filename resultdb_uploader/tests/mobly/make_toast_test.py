@@ -20,6 +20,9 @@ class MakeToastTest(base_test.BaseTestClass):
   def test_goodbye(self):
     self.dut.mbs.makeToast('Goodbye!')
 
+  def teardown_test(self):
+    self.dut.services.create_output_excerpts_all(self.current_test_info)
+
 
 if __name__ == '__main__':
   test_runner.main()
