@@ -1,0 +1,77 @@
+---
+Requested Tests:
+- test_hello_world
+Type: TestNameList
+---
+Begin Time: 1652860218564
+Details: "error message 1"
+End Time: 1652860225508
+Extra Errors: {}
+Extras: null
+Result: ERROR
+Retry Parent: null
+Signature: test_hello_world_0-1652860218564
+Stacktrace: "error stacktrace 0"
+Termination Signal Type: Error1
+Test Class: HelloWorldTest
+Test Name: test_hello_world_0
+Type: Record
+UID: null
+---
+Begin Time: 1652860225518
+Details: null
+End Time: 1652860232487
+Extra Errors: {}
+Extras: null
+Result: PASS
+Retry Parent: null
+Parent:
+    parent: test_hello_world_0-1652860218564
+    type: repeat
+Signature: test_hello_world_1-1652860225518
+Stacktrace: null
+Test Class: HelloWorldTest
+Test Name: test_hello_world_1
+Type: Record
+UID: null
+---
+Begin Time: 1652860232494
+Details: "error message 2"
+End Time: 1652860239558
+Extra Errors: {}
+Extras: null
+Result: ERROR
+Retry Parent: null
+Parent:
+    parent: test_hello_world_1-1652860225518
+    type: repeat
+Signature: test_hello_world_2-1652860232494
+Stacktrace: "error stacktrace 1"
+Termination Signal Type: Error2
+Test Class: HelloWorldTest
+Test Name: test_hello_world_2
+Type: Record
+UID: null
+---
+Test Name: test_hello_world_0
+Type: UserData
+sponge_properties: {test_hello_prop: 'test_hello_val_0'}
+timestamp: 1541460960000
+---
+Test Name: test_hello_world_1
+Type: UserData
+sponge_properties: {test_hello_prop: 'test_hello_val_1'}
+timestamp: 1541460960000
+---
+Test Name: test_hello_world_2
+Type: UserData
+sponge_properties: {test_hello_prop: 'test_hello_val_2'}
+timestamp: 1541460960000
+---
+Error: 2
+Executed: 3
+Failed: 0
+Passed: 1
+Requested: 1
+Skipped: 0
+Type: Summary

@@ -1,0 +1,21 @@
+---
+Requested Tests: [test_hello]
+Type: TestNameList
+---
+Begin Time: 1485396391375
+Details: Test failure message
+End Time: 1485396391386
+Extra Errors: {}
+Extras: null
+Result: FAIL
+Stacktrace: null
+Termination Signal Type: null
+Test Class: HelloWorldTest
+Test Name: test_hello
+Type: Record
+UID: null
+---
+AndroidDevice:
+- {build_id: N1234, build_type: userdebug, model: sailfish, serial: 1234567890}
+Type: ControllerInfo
+--- {Error: 0, Executed: 1, Failed: 1, Passed: 0, Requested: 1, Skipped: 0, Type: Summary}

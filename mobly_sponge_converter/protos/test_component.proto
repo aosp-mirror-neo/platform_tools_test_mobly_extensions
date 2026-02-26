@@ -1,0 +1,114 @@
+edition = "2024";
+
+package mobly_sponge_converter;
+
+import "google/protobuf/timestamp.proto";
+
+option features.field_presence = IMPLICIT;
+
+// Represents a system under test or an important part of the test
+// infrastructure, including, but not limited to a piece of physical hardware,
+// a virtual machine, firmware, a server, or a client.
+//
+// TestComponents will be grouped on name, and then mergeFrom() will be called
+// in the order they were written to the file until there is one TestComponent
+// per name.
+message TestComponent {
+  // A name for this component.
+  // This will be used to uniquely identify this TestComponent.
+  // Must only contain [a-zA-Z0-9_-].
+  // Required.
+  string name = 1;
+
+  // A human-readable name for this TestComponent for UIs.
+  // Should be unique.
+  string display_name = 2;
+
+  // Labels to categorize this invocation.
+  // Labels should be a list of words describing the TestComponent.
+  // Labels should be short, easy to read, and you shouldn't have more than a
+  // handful.  Labels should not be used for unique properties such as
+  // unique IDs. Use properties in cases that don't meet these conditions.
+  repeated string labels = 3;
+
+  // This field describes the overall context or purpose of this TestComponent.
+  // It will be used in the UI to give users more information about
+  // what this TestComponent was, or how it was used.
+  string description = 4;
+
+  // The type of TestComponent.
+  // Examples include: "service", "client", "server", "phone", "laptop",
+  // "desktop", "workstation"
+  // (-- TODO(b/233784863) Define example/standard w/ Fusion team. --)
+  string type = 5;
+
+  // A list of TestComponent that this TestComponent depended upon.
+  repeated TestComponentDependency dependencies = 6;
+
+  // Arbitrary key-value pairs associated with the TestComponent
+  repeated TestComponentProperty properties = 7;
+
+  // The relative path of files within $TEST_UNDECLARED_OUTPUTS_DIR that are
+  // relevant to this TestComponent.
+  repeated string relative_file_paths = 8;
+
+  // Timing information about this TestComponent
+  TestComponentTiming timing = 9;
+
+  // Events that happened to this TestComponent.
+  repeated TestComponentEvent events = 10;
+}
+
+// Represents a dependency of a TestComponent on another TestComponent. This can
+// be used to define a graph or a workflow paradigm through TestComponent.
+// For example, this could define a phone plugged into to a laptop, a client
+// connected to a server, or a hardware device that has a certain firmware.
+message TestComponentDependency {
+  // The component depended on.
+  // This should correspond to a component_name of another TestComponent
+  // produced within the same Bazel action.
+  // Required.
+  string component = 1;
+
+  // A label describing this dependency.
+  // Required.
+  // (-- TODO(b/233784863) Define example/standard labels w/ Fusion team. --)
+  string label = 2;
+
+  // A human-readable description of this dependency for UIs.
+  string description = 3;
+}
+
+// A generic key-value property definition.
+message TestComponentProperty {
+  // The key.
+  string key = 1;
+
+  // The value.
+  string value = 2;
+}
+
+// Timing information about a TestComponent
+message TestComponentTiming {
+  // The time at which the state of this component was recorded, if available.
+  google.protobuf.Timestamp snapshot_time = 1;
+}
+
+// An event that happened to the TestComponent, changing its state.
+message TestComponentEvent {
+  // The type of event.
+  string event = 1;
+
+  // A human-readable description of the event for UIs.
+  string description = 2;
+
+  // Arbitrary key-value pairs associated with the event.
+  repeated TestComponentProperty properties = 3;
+
+  // The relative path of files within $TEST_UNDECLARED_OUTPUTS_DIR that are
+  // relevant to this event.
+  repeated string relative_file_paths = 4;
+
+  // The time at which the event happened.
+  google.protobuf.Timestamp event_time = 5;
+}
