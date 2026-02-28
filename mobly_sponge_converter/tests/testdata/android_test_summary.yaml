@@ -1,0 +1,31 @@
+---
+Controller Info:
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: build_fingerprint_1
+        version: 30
+    model: model_1
+    serial: device_serial_1
+    user_added_info: {user_key_1: user_value_1}
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: build_fingerprint_2
+    model: model_2
+    serial: device_serial_2
+    user_added_info: {user_key_2: user_value_2}
+Controller Name: AndroidDevice
+Test Class: HelloWorldTest
+Timestamp: 1667986961.824736
+Type: ControllerInfo
+---
+Controller Info:
+-   build_info:
+        build_characteristics: default
+        build_fingerprint: build_fingerprint_2
+    model: model_2
+    serial: device_serial_2
+    user_added_info: {user_key_3: user_value_3}
+Controller Name: AndroidDevice
+Test Class: HelloWorldTest
+Timestamp: 1667986961.824736
+Type: ControllerInfo

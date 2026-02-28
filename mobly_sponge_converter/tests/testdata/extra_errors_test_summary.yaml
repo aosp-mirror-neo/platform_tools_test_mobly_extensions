@@ -1,0 +1,31 @@
+---
+Requested Tests: [test_hello]
+Type: TestNameList
+---
+Begin Time: 1485396391375
+Details: test_error_detail_1
+End Time: 1485396391386
+Extra Errors:
+    teardown_test:
+        Details: test_error_detail_2
+        Extras: null
+        Position: teardown_test
+        Stacktrace: test_stack_trace_2
+    expect@1708413110:
+        Details: test_error_detail_3
+        Extras: null
+        Position: expect@1708413110
+        Stacktrace: test_stack_trace_3
+Extras: null
+Result: ERROR
+Stacktrace: test_stack_trace_1
+Termination Signal Type: Error
+Test Class: HelloWorldTest
+Test Name: test_hello
+Type: Record
+UID: null
+---
+AndroidDevice:
+- {build_id: N1234, build_type: userdebug, model: sailfish, serial: 1234567890}
+Type: ControllerInfo
+--- {Error: 0, Executed: 2, Failed: 1, Passed: 1, Requested: 2, Skipped: 0, Type: Summary}

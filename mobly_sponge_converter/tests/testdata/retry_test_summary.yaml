@@ -1,0 +1,63 @@
+---
+Requested Tests:
+- test_hello_world
+Type: TestNameList
+---
+Begin Time: 1652849098542
+Details: "error message 1"
+End Time: 1652849105647
+Extra Errors: {}
+Extras: null
+Result: ERROR
+Retry Parent: null
+Signature: test_hello_world-1652849098542
+Stacktrace: "error stacktrace 1"
+Termination Signal Type: Error1
+Test Class: HelloWorldTest
+Test Name: test_hello_world
+Type: Record
+UID: null
+---
+Begin Time: 1652849105659
+Details: "error message 2"
+End Time: 1652849112698
+Extra Errors: {}
+Extras: null
+Result: ERROR
+Retry Parent: test_hello_world-1652849098542
+Parent:
+    parent: test_hello_world-1652849098542
+    type: retry
+Signature: test_hello_world_retry_1-1652849105659
+Stacktrace: "error stacktrace 2"
+Termination Signal Type: Error2
+Test Class: HelloWorldTest
+Test Name: test_hello_world_retry_1
+Type: Record
+UID: null
+---
+Begin Time: 1652849112706
+Details: null
+End Time: 1652849119876
+Extra Errors: {}
+Extras: null
+Result: PASS
+Retry Parent: test_hello_world_retry_1-1652849105659
+Parent:
+    parent: test_hello_world_retry_1-1652849105659
+    type: retry
+Signature: test_hello_world_retry_2-1652849112706
+Stacktrace: null
+Termination Signal Type: null
+Test Class: HelloWorldTest
+Test Name: test_hello_world_retry_2
+Type: Record
+UID: null
+---
+Error: 2
+Executed: 3
+Failed: 0
+Passed: 1
+Requested: 1
+Skipped: 0
+Type: Summary

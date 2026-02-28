@@ -19,6 +19,9 @@ class TurnOffWifiTest(base_test.BaseTestClass):
     self.dut.mbs.wifiDisable()
     asserts.assert_false(self.dut.mbs.wifiIsEnabled(), 'WIFI is not disabled.')
 
+  def teardown_test(self):
+    self.dut.services.create_output_excerpts_all(self.current_test_info)
+
 
 if __name__ == '__main__':
   test_runner.main()
